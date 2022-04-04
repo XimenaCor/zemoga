@@ -6,21 +6,34 @@ import ThumbsDown from '../../assets/img/thumbs-down.svg';
 const Card = ({
   person = null
 }) => {
-
-  const [percentagePositive, setPercentagePositive] = React.useState(0);
-  const [percentageNegative, setPercentageNegative] = React.useState(0);
+  const [positiveVotes, setPositiveVotes] = React.useState(0);
+  const [negativeVotes, setNegativeVotes] = React.useState(0);
+  const [visibleButtons, setVisibleButtons] = React.useState(true);
+  const [voteType, setVoteType] = React.useState('');
 
   React.useEffect(() => {
     if (person) {
-      const { votes } = person;
-      const total = votes.positive + votes.negative;
-      const positive = (votes.positive * 100)/total;
-      const negative = (votes.negative * 100)/total;
-      setPercentagePositive(positive);
-      setPercentageNegative(negative);     
+      const { votes: { positive, negative } } = person;
+      setPositiveVotes(positive)
+      setNegativeVotes(negative)
     }
   }, [person])
-  
+
+  const handlePercentage = (value) => {
+    const total = positiveVotes + negativeVotes;
+    const percentaje = ((value * 100) / total).toFixed(1);
+    return percentaje
+  }
+
+  const handleVoting = () => {
+    if (voteType === 'up') {
+      setPositiveVotes(positiveVotes + 1)
+    }
+    if (voteType === 'down') {
+      setNegativeVotes(negativeVotes + 1)
+    }
+    setVisibleButtons(false)
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', border: '2px black solid' }}>
@@ -35,25 +48,33 @@ const Card = ({
             <p>{person.name}</p>
             <p>{person.description}</p>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'row', width: '30%' }}>
-            <button className="icon-button" aria-label="thumbs up">
-              <img src={ThumbsUp} alt="thumbs up" />
-            </button>
-            <button className="icon-button" aria-label="thumbs up">
-              <img src={ThumbsDown} alt="thumbs down" />
-            </button>
-            <button className="icon-button" aria-label="thumbs up">
-              Vote Now
-            </button>
-          </div>
+          {
+            visibleButtons ? (
+              <div style={{ display: 'flex', flexDirection: 'row', width: '30%' }}>
+                <button className="icon-button" aria-label="thumbs up" onClick={() => setVoteType('up')}>
+                  <img src={ThumbsUp} alt="thumbs up" />
+                </button>
+                <button className="icon-button" aria-label="thumbs down" onClick={() => setVoteType('down')}>
+                  <img src={ThumbsDown} alt="thumbs down" />
+                </button>
+                <button className="icon-button" aria-label="thumbs up" onClick={handleVoting}>
+                  Vote Now
+                </button>
+              </div>
+            ) : (
+              <button className="icon-button" aria-label="thumbs up" onClick={() => setVisibleButtons(true)}>
+                Vote Again
+              </button>
+            )
+          }
         </div>
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div style={{ backgroundColor: 'teal', width: `${percentagePositive}%` }}>
-          {percentagePositive.toFixed(1)}%
+        <div style={{ backgroundColor: 'teal', width: `${handlePercentage(positiveVotes)}%` }}>
+          {handlePercentage(positiveVotes)}%
         </div>
-        <div style={{ backgroundColor: 'orange', width: `${percentageNegative}%` }}>
-          {percentageNegative.toFixed(1)}%
+        <div style={{ backgroundColor: 'orange', width: `${handlePercentage(negativeVotes)}%` }}>
+          {handlePercentage(negativeVotes)}%
         </div>
       </div>
     </div>
