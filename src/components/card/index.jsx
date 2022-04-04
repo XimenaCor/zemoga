@@ -4,18 +4,23 @@ import ThumbsUp from '../../assets/img/thumbs-up.svg'
 import ThumbsDown from '../../assets/img/thumbs-down.svg';
 
 const Card = ({
-  person = {
-    "name": "Kanye West",
-    "description": "Born in Atlanta and raised in Chicago, West was first known as a producer for Roc-A-Fella Records in the early 2000s, producing singles for several mainstream artists.",
-    "category": "entertainment",
-    "picture": "kanye.png",
-    "lastUpdated": "2020-03-10T23:08:57.892Z",
-    "votes": {
-      "positive": 23,
-      "negative": 36
-    }
-  }
+  person = null
 }) => {
+
+  const [percentagePositive, setPercentagePositive] = React.useState(0);
+  const [percentageNegative, setPercentageNegative] = React.useState(0);
+
+  React.useEffect(() => {
+    if (person) {
+      const { votes } = person;
+      const total = votes.positive + votes.negative;
+      const positive = (votes.positive * 100)/total;
+      const negative = (votes.negative * 100)/total;
+      setPercentagePositive(positive);
+      setPercentageNegative(negative);     
+    }
+  }, [person])
+  
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', border: '2px black solid' }}>
@@ -44,11 +49,11 @@ const Card = ({
         </div>
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div style={{ backgroundColor: 'teal', width: '20%' }}>
-          25.6%
+        <div style={{ backgroundColor: 'teal', width: `${percentagePositive}%` }}>
+          {percentagePositive.toFixed(1)}%
         </div>
-        <div style={{ backgroundColor: 'orange', width: '80%' }}>
-          85.6%
+        <div style={{ backgroundColor: 'orange', width: `${percentageNegative}%` }}>
+          {percentageNegative.toFixed(1)}%
         </div>
       </div>
     </div>
