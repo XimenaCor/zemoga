@@ -15,9 +15,15 @@ npm 6.14.12
 node 14.16.1
 ```
 
-### Installing
+### Clone and Installing
 
-To install all the dependencies go to the root directory and execute
+You can clone this repo in [https://github.com/XimenaCor/zemoga/tree/main](https://github.com/XimenaCor/zemoga/tree/main) and execute
+
+```
+git clone https://github.com/XimenaCor/zemoga.git
+```
+
+To install all the dependencies go to the root directory of the cloned repo and execute
 
 ```
 npm install
@@ -44,4 +50,4 @@ People that work/worked on the project:
 
 ## Project Status
 
-- Currrently the project has been initialised in the date of: 03/04/2022, will be active for improvements/enhancements/bugfixing and others.
+- Currrently the project has been finished in the date of: 06/04/2022.
