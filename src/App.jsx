@@ -1,3 +1,5 @@
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Search from './assets/img/search.svg';
 import ThumbsUp from './assets/img/thumbs-up.svg';
 import ThumbsDown from './assets/img/thumbs-down.svg';
@@ -6,9 +8,21 @@ import PopeFrancis from './assets/img/pope-francis.png';
 import './App.css';
 import data from './utils/data'
 import Card from './components/card';
+import { setData } from './redux/actions/votes';
 
 function App() {
-  console.log('ximena', data)
+  const dispatch = useDispatch();
+  const dataToRead = useSelector(state => state.votes.data);
+
+  React.useEffect(() => {
+    const localData = JSON.parse(localStorage.getItem('localData'));
+    if (localData && localData.length > 0) {
+      dispatch(setData(localData))
+    } else {
+      dispatch(setData(data))
+    }
+  }, [])
+  
   return (
     <div className="App">
       <nav className="nav" role="navigation">
@@ -102,8 +116,8 @@ function App() {
         <main role="main">
           {/* <!-- Start: Implementation --> */}
           {
-            data.map(element => (
-              <Card key={element.name} person={element} />
+            dataToRead.map(element => (
+              <Card key={element._id} person={element} />
             ))
           }
           {/* <!-- End: Implementation --> */}

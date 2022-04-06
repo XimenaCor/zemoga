@@ -1,7 +1,10 @@
 import React from 'react';
-import '../../App.css';
+import { useSelector } from 'react-redux';
+
 import ThumbsUp from '../../assets/img/thumbs-up.svg'
 import ThumbsDown from '../../assets/img/thumbs-down.svg';
+
+import '../../App.css';
 
 const Card = ({
   person = null
@@ -10,6 +13,9 @@ const Card = ({
   const [negativeVotes, setNegativeVotes] = React.useState(0);
   const [visibleButtons, setVisibleButtons] = React.useState(true);
   const [voteType, setVoteType] = React.useState('');
+  const [hasUserVote, setHasUserVote] = React.useState(false);
+
+  const dataToRead = useSelector(state => state.votes.data);
 
   React.useEffect(() => {
     if (person) {
@@ -19,6 +25,30 @@ const Card = ({
     }
   }, [person])
 
+  React.useEffect(() => {
+    if (hasUserVote) {
+      const newPersonObject = {...person, votes:{
+        positive: positiveVotes,
+        negative: negativeVotes
+      }}
+      const index = dataToRead.findIndex((elem, index) => {
+        if (elem._id === person._id) {
+          return true
+        }
+      })
+      let newData = dataToRead;
+      newData[index] = newPersonObject;
+      localStorage.setItem('localData', JSON.stringify(newData))
+    }
+  }, [hasUserVote])
+  
+  React.useEffect(() => {
+    if (!visibleButtons) {
+      setHasUserVote(false)
+    }
+  }, [visibleButtons])
+  
+  
   const handlePercentage = (value) => {
     const total = positiveVotes + negativeVotes;
     const percentaje = ((value * 100) / total).toFixed(1);
@@ -32,7 +62,8 @@ const Card = ({
     if (voteType === 'down') {
       setNegativeVotes(negativeVotes + 1)
     }
-    setVisibleButtons(false)
+    setVisibleButtons(false);
+    setHasUserVote(true);
   }
 
   return (

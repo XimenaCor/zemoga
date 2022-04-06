@@ -6,3 +6,10 @@ export function setVotes(votes) {
     payload: votes,
   }
 }
+
+export function setData(data) {
+  return {
+    type: type.SET_DATA,
+    payload: data,
+  }
+}
