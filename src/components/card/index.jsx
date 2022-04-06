@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux';
 import ThumbsUp from '../../assets/img/thumbs-up.svg'
 import ThumbsDown from '../../assets/img/thumbs-down.svg';
 
-import '../../App.css';
-
 const Card = ({
   person = null
 }) => {
@@ -31,16 +29,16 @@ const Card = ({
         positive: positiveVotes,
         negative: negativeVotes
       }}
-      const index = dataToRead.findIndex((elem, index) => {
+      const index = dataToRead.findIndex(elem => {
         if (elem._id === person._id) {
           return true
-        }
+        } else return false
       })
       let newData = dataToRead;
       newData[index] = newPersonObject;
       localStorage.setItem('localData', JSON.stringify(newData))
     }
-  }, [hasUserVote])
+  }, [hasUserVote, dataToRead, positiveVotes, negativeVotes, person])
   
   React.useEffect(() => {
     if (!visibleButtons) {
