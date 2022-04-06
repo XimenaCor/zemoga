@@ -45,6 +45,7 @@ const Card = ({
   React.useEffect(() => {
     if (!visibleButtons) {
       setHasUserVote(false)
+      setVoteType('')
     }
   }, [visibleButtons])
   
@@ -88,7 +89,7 @@ const Card = ({
                 <button className="icon-button" aria-label="thumbs down" onClick={() => setVoteType('down')}>
                   <img src={ThumbsDown} alt="thumbs down" />
                 </button>
-                <button className="icon-button" aria-label="thumbs up" onClick={handleVoting}>
+                <button className="icon-button" aria-label="thumbs up" onClick={handleVoting} disabled={voteType === '' ? true : false}>
                   Vote Now
                 </button>
               </div>
